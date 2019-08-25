@@ -1,5 +1,9 @@
 package com.soa.stripe.dto;
 
-public class CustomerDto {
+import java.io.Serializable;
+
+public class CustomerDto implements Serializable{
+	
+	
 
 }

@@ -8,8 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Builder;
+import lombok.ToString;
+
 @Entity
 @Table
+@ToString
+@Builder
 public class User implements Serializable{
 	
 	private static final long serialVersionUID = -5236608329002390774L;
