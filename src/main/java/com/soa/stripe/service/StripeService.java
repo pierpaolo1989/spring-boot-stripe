@@ -9,12 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.soa.stripe.dto.ChargeRequest;
-import com.soa.stripe.dto.CustomerDto;
-import com.stripe.exception.ApiConnectionException;
-import com.stripe.exception.ApiException;
-import com.stripe.exception.AuthenticationException;
-import com.stripe.exception.CardException;
-import com.stripe.exception.InvalidRequestException;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 
@@ -31,14 +27,13 @@ public class StripeService implements IStripeService{
 		try {
 			return Customer.retrieve(id);
 		} catch (Exception e) {
-			logger.error("impossible to retrieve customer with ID: {}",id,e.getMessage());
+			logger.error("Impossible to retrieve customer with ID: {}",id,e.getMessage());
 			throw(e);
 		}
 	}
 
 	@Override
-	public Charge charge(ChargeRequest request) throws AuthenticationException, InvalidRequestException,
-	ApiConnectionException, CardException, ApiException {
+	public Charge charge(ChargeRequest request) throws StripeException {
 		Map<String, Object> chargeParams = new HashMap<String,Object>();
 		chargeParams.put("amount", request.getAmount());
 		chargeParams.put("currency", request.getCurrency());
@@ -46,4 +41,25 @@ public class StripeService implements IStripeService{
 		chargeParams.put("source", request.getStripeToken());
 		return Charge.create(chargeParams);
 	}
+	
+	@Override
+	public String createCustomer(String email, String token) {
+        String id = null;
+        try {
+            Stripe.apiKey = stripePublicKey;
+            Map<String, Object> customerParams = new HashMap<>();
+            
+            customerParams.put("description", "Customer for " + email);
+            customerParams.put("email", email);
+
+            customerParams.put("source", token); // obtainer with Stripe js
+            
+            //create a new customer
+            Customer customer = Customer.create(customerParams);
+            id = customer.getId();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return id;
+    }
 }
