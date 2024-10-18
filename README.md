@@ -1,4 +1,7 @@
 # spring-boot-stripe
+https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white
+https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white
+
 Stripe integration in Spring boot project
 
 # Lombok
